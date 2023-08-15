@@ -1,53 +1,48 @@
 import os
 import pyautogui
 import threading
-import keyboard
 from datetime import datetime
+from pynput import mouse, keyboard
 
-# Global variables
-running = True
-screenshot_count = 0
+class ScreenshotCapture:
+    def __init__(self):
+        self.running = False
+        self.stop_event = threading.Event()  # Event to signal thread to stop
 
-def screenshot_thread():
-    global running, screenshot_count
-    while running:
-        if screenshot_count > 0:
-            # Capture screenshot
+    def screenshot_thread(self):
+        while self.running:
             screenshot = pyautogui.screenshot()
-            # Create the "screenshots" directory if it doesn't exist
             if not os.path.exists("screenshots"):
                 os.makedirs("screenshots")
-            # Get current date and time
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")
-            # Save screenshot within the "screenshots" directory with the timestamp as the name
             screenshot.save(os.path.join("screenshots", f"screenshot_{timestamp}.png"))
-            screenshot_count -= 1
 
-def stop_screenshot_thread():
-    global running
-    running = False
+    def stop_capture(self, key):
+        if key == keyboard.Key.esc:
+            self.running = False
+            print("Stopping screenshot capturing...")
+            return False  # Stop listener
 
-# Start the screenshot thread
-thread = threading.Thread(target=screenshot_thread)
-running = True
-thread.start()
+    def start_capture(self):
+        print("Screenshot capturing started. Press 'Esc' to stop.")
+        with keyboard.Listener(on_press=self.stop_capture) as listener:
+            with mouse.Listener(on_click=self.on_mouse_click) as listener_mouse:
+                self.running = True
+                listener.join()
+                listener_mouse.join()
 
-print("Screenshot capturing started. Press 'Esc' to stop.")
+        print("Screenshot capturing stopped.")
 
-# Register the "Esc" key press event
-keyboard.on_press_key("esc", stop_screenshot_thread)
+    def on_mouse_click(self, x, y, button, pressed):
+        if self.running and pressed:
+            screenshot = pyautogui.screenshot()
+            if not os.path.exists("screenshots"):
+                os.makedirs("screenshots")
+            now = datetime.now()
+            timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")
+            screenshot.save(os.path.join("screenshots", f"screenshot_{timestamp}.png"))
 
-# Keep the main thread alive
-try:
-    while running:
-        pass
-except KeyboardInterrupt:
-    pass
-
-# Stop the screenshot thread
-thread.join()
-print("Screenshot capturing stopped.")
-
-# Unregister the key press event
-keyboard.unhook_all()
+if __name__ == "__main__":
+    screenshot_capture = ScreenshotCapture()
+    screenshot_capture.start_capture()
