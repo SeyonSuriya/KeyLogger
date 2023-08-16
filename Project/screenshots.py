@@ -1,6 +1,7 @@
 import os
 import pyautogui
 import threading
+import time
 from datetime import datetime
 from pynput import mouse, keyboard
 
@@ -36,13 +37,10 @@ class ScreenshotCapture:
 
     def on_mouse_click(self, x, y, button, pressed):
         if self.running and pressed:
+            time.sleep(1)  # Introduce a 1-second delay after a mouse click
             screenshot = pyautogui.screenshot()
             if not os.path.exists("screenshots"):
                 os.makedirs("screenshots")
             now = datetime.now()
             timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")
             screenshot.save(os.path.join("screenshots", f"screenshot_{timestamp}.png"))
-
-if __name__ == "__main__":
-    screenshot_capture = ScreenshotCapture()
-    screenshot_capture.start_capture()
