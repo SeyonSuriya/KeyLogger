@@ -16,7 +16,7 @@ class BrowserHistoryFetcher:
                 continue
 
             if history_entries:
-                history_folder = "Browser_History"
+                history_folder = "../Logs/Browser_History"
 
                 if not os.path.exists(history_folder):
                     os.makedirs(history_folder)
