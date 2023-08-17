@@ -1,3 +1,4 @@
+import keyboard
 import pyperclip
 import time
 from datetime import datetime
@@ -12,8 +13,9 @@ class ClipboardMonitor:
         timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
         content_to_save = f"{now.date()} - {now.time()} - \n{content}\n"
 
-        with open("clipboard_grap.txt", "a") as file:
+        with open("../Logs/clipboard_grap.txt", "a") as file:
             file.write(content_to_save)
+            file.write("\n")
 
     def start_monitoring(self):
         print("Clipboard monitoring started. Press 'Ctrl+C' to stop.")
@@ -25,5 +27,8 @@ class ClipboardMonitor:
                     self.save_clipboard_content(clipboard_content)
                     print("New clipboard content saved.")
                 time.sleep(self.interval)
+                if keyboard.is_pressed('ctrl') and keyboard.is_pressed('shift') and keyboard.is_pressed('alt'):
+                    print("Clipboard monitoring stopped.")
+                    break  # Exit the loop when the key combination is pressed
         except KeyboardInterrupt:
             print("Clipboard monitoring stopped.")
