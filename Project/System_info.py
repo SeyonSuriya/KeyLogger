@@ -6,8 +6,7 @@ import psutil
 import tkinter as tk
 
 class SystemInfoRecorder:
-    def __init__(self, output_filename="system_info.txt"):
-        self.output_filename = output_filename
+    def __init__(self):
         self.root = tk.Tk()
 
     def get_username(self):
@@ -45,7 +44,8 @@ class SystemInfoRecorder:
         return psutil.disk_partitions()
 
     def write_system_info_to_file(self):
-        with open(self.output_filename, "w") as file:
+        systeminfo_file_path = "../Logs/System_Info"
+        with open(systeminfo_file_path, "w") as file:
             file.write(f"Username: {self.get_username()}\n")
             file.write(f"Home Directory: {self.get_home_directory()}\n")
             file.write(f"System Information: {self.get_system_info()}\n")
@@ -85,5 +85,5 @@ class SystemInfoRecorder:
             file.write(f" Screen Size: {screen_width} x {screen_height} pixels\n")
             file.write(f" Screen Resolution: {screen_resolution:.2f} DPI\n")
 
-        print(f"System information written to {self.output_filename}")
+        print(f"System information written to System_Info file")
 
