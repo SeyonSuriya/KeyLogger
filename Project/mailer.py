@@ -5,7 +5,7 @@ from email import encoders
 import smtplib
 
 class EmailSender:
-    def __init__(self, email_address, password, to_address):
+    def __init__(self):
         self.email_address = "vikramathithyan99@gmail.com"
         self.password = "jguinpzxcwsksieu"
 
