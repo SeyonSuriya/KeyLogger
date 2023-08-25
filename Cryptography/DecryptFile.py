@@ -1,23 +1,27 @@
 from cryptography.fernet import Fernet
 
-key ="tDWFF3R1Zq8zImGIcb5TwoH0xnkulPR12xGVg54e6Jg="
+class FileDecryptor:
+    def __init__(self, encryption_key):
+        self.fernet = Fernet(encryption_key)
 
-system_information_e = "e_system.txt"
-clipboard_information_e = "e_clipboard.txt"
-keys_information_e = "e_keys_logged.txt"
+    def decrypt_file(self, input_filename, output_filename):
+        with open(input_filename, 'rb') as file:
+            encrypted_data = file.read()
 
-encrypted_files = [system_information_e, clipboard_information_e, keys_information_e]
-count = 0
+        decrypted_data = self.fernet.decrypt(encrypted_data)
 
-for decrypting_file in encrypted_files:
+        with open(output_filename, 'wb') as file:
+            file.write(decrypted_data)
 
-    with open(encrypted_files[count], 'rb') as f:
-        data = f.read()
-
-    fernet = Fernet(key)
-    decrypted = fernet.decrypt(data)
-
-    with open(encrypted_files[count], 'wb') as f:
-        f.write(decrypted)
-
-    count += 1
+# if __name__ == "__main__":
+#     # Replace with the same encryption key used for encryption
+#     encryption_key = b'YOUR_ENCRYPTION_KEY_HERE'
+#
+#     # Paths to encrypted input and decrypted output files
+#     input_encrypted_filename = 'encrypted.zip'
+#     output_decrypted_filename = 'decrypted.zip'
+#
+#     decryptor = FileDecryptor(encryption_key)
+#     decryptor.decrypt_file(input_encrypted_filename, output_decrypted_filename)
+#
+#     print(f'File "{input_encrypted_filename}" decrypted and saved as "{output_decrypted_filename}".')
