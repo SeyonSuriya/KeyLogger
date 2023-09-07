@@ -4,6 +4,7 @@ import platform
 import socket
 import psutil
 import tkinter as tk
+import requests.api
 
 class SystemInfoRecorder:
     def __init__(self):
@@ -33,6 +34,18 @@ class SystemInfoRecorder:
     def get_host_name(self):
         return socket.gethostname()
 
+    def get_IP_Address(self):
+        hostname = socket.gethostname()
+        return socket.gethostbyname(hostname)
+
+    def get_public_ip(self):
+        try:
+            public_ip = requests.get("https://api.ipify.org").text
+            return public_ip
+
+        except Exception:
+            return None
+
     def get_hardware_details(self):
         processor = platform.processor()
         virtual_memory = psutil.virtual_memory()
@@ -54,6 +67,8 @@ class SystemInfoRecorder:
             file.write(f"User Home: {self.get_user_home()}\n")
             file.write(f"User Name: {self.get_user_name()}\n")
             file.write(f"Host Name: {self.get_host_name()}\n")
+            file.write(f"IP Address: {self.get_IP_Address()}\n")
+            file.write(f"Public IP Address: {self.get_public_ip()}\n")
             file.write("\n")
             file.write(f"System Hardware\n")
             processor, total_memory, available_memory = self.get_hardware_details()
